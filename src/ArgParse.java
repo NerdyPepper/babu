@@ -5,10 +5,7 @@ import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
 public class ArgParse {
-    private enum Target { NEW, BUILD, RUN, HELP }
-    ;
-
-    private Target subCmd;
+    private Target commandName;
     private String value;
 
     private static Target matchTarget( String tar ) {
@@ -27,7 +24,7 @@ public class ArgParse {
     }
 
     private void useDefaults() {
-        switch ( this.subCmd ) {
+        switch ( this.commandName ) {
         case NEW:
             this.value = "new_babu_project";
             break;
@@ -47,7 +44,7 @@ public class ArgParse {
             printHelp();
             System.exit( 0 );
         } else {
-            this.subCmd = matchTarget( args[ 0 ] );
+            this.commandName = matchTarget( args[ 0 ] );
             try {
                 this.value = Arrays.stream( args ).skip( 1 ).collect(
                     Collectors.joining( "_" ) );
@@ -57,9 +54,17 @@ public class ArgParse {
         }
     }
 
+    public Target getCommandName() {
+        return this.commandName;
+    }
+
+    public String getValue() {
+        return this.value;
+    }
+
     public String toString() {
         String s = String.format( "Sub Command: %s, Value: %s",
-                                  this.subCmd.toString(), this.value );
+                                  this.commandName.toString(), this.value );
         return s;
     }
 }
